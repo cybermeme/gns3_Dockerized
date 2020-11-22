@@ -7,7 +7,7 @@ https://docs.docker.com/engine/install/
 * Debian 10
 * Ubuntu 20
 
-### Facilities that have requested modifications
+### Distribs that have requested modifications
 
 * Kali-linux
 To install Docker on kali linux, I used https://docs.docker.com/engine/install/debian/ and, when configuring the repo, instead of:
