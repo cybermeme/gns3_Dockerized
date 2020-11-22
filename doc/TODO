@@ -1,0 +1,16 @@
+ _____
+/TODO/
+-----
+
+
+- install and configure a vnc server to be able to use the GNS3 Docker appliances.
+- make the tutorial videos on how to use and virt-manager to create VMs.
+- make the tutorial videos on how to use qemu in CLI to create VMs.
+- Make a python tool to import/export appliances and projects.
+
+---
+
+- installer et configurer un serveur vnc pour pouvoir utiliser les appliances Docker GNS3.
+- faire les vidéos de tuto sur l'utilisation et virt-manager pour créer des VMs.
+- faire les vidéos de tuto sur l'utilisation de qemu en CLI pour créer des VMs.
+- Faire un tool en python pour importer/exporter les appliances et projets.
