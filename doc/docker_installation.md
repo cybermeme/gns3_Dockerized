@@ -42,7 +42,7 @@ https://linuxconfig.org/manjaro-linux-docker-installation
 * Mint (linux)*
 To install Docker on Linux Mint, I used https://docs.docker.com/engine/install/ubuntu/ and, after configuring the repository, instead of $(lsb_release -cs) I specified the equivalent version in ubuntu:
 the line of the modified file is in /etc/apt/source.list.d/additional-repositories.list:
->  deb https://download.docker.com/linux/ubuntu focal stable
+>  deb https://download.docker.com/linux/ubuntu focal stable  
 \*the principle is the same as for kali linux
 
 
@@ -92,6 +92,6 @@ https://linuxconfig.org/manjaro-linux-docker-installation
 * Mint (linux)*
 Pour installer Docker sur Linux Mint, j'ai utilisé https://docs.docker.com/engine/install/ubuntu/ et, après avoir configurer le dépot, au lieu de $(lsb_release -cs) j'ai indiqué la version équivalente en ubuntu:
 la ligne du fichier modifiée est dans /etc/apt/source.list.d/additional-repositories.list:
->  deb https://download.docker.com/linux/ubuntu focal stable
+>  deb https://download.docker.com/linux/ubuntu focal stable  
 \*le principe est le même que pour kali linux
 
