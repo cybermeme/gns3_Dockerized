@@ -34,7 +34,7 @@ docker cp image.qcow2 gns3client:/home/gns3user/GNS3/images/QEMU
 
 ### README:  
 * Always start the server first.
-If the server is running (docker ps will tell you), you can launch gns3 directly with it:  
+If the server is running (docker ps will tell you), you can start gns3 directly with:  
 docker start gns3client.
 
 * NAT is not running yet but Cloud is and it connect you directly to an interface.
