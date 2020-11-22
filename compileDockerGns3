@@ -2,7 +2,7 @@
 
 ###########################
 # Docker gns3             #
-# version: 0.1beta	   #
+# version: 2beta	   #
 # Usage:		   #
 # ./compileDockerGns3 tag #
 ###########################
