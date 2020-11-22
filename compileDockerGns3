@@ -1,0 +1,90 @@
+#!/bin/bash
+
+###########################
+# Docker gns3             #
+# version: 0.1beta	   #
+# Usage:		   #
+# ./compileDockerGns3 tag #
+###########################
+
+#basé sur mon post: https://blog.arch-libertas.net/2020/11/test-v1-gns3-kvm-on-fedora-33/
+#dans le client j'ai mis firefox pour dl les appliances
+#J'ai redécouvert docker cp après, j'ai quand meme laissé firefox pour quand on clique sur download
+#dans gns3 il faut dans les configs:
+#Edit / Preferences / General / VNC Edit et choisir Remote Viewver
+#Edit / Preferences / Qemu décocher KVM
+#une fois les modifs de config effectuées, il faut redémarer le gns3serveur avec docker stop puis docker start, pas docker restart
+#il faut que les 2 containers aient le repertoire en commun pour pouvoir synchroniser les fichiers de config
+
+
+############
+#constantes#
+############
+
+#si pas d'arguments le tag est latest
+if [[ -z $1 ]] ; then
+  label="latest"
+else
+  label=$1
+fi
+
+
+###########
+#Fonctions#
+###########
+
+#fonction compile
+# argument $1 = $1 de l'appel
+#argument $2 est le nom serveur ou client
+
+compile () {
+    docker build -t gns3base:v2b ./gns3Base
+    docker build -t gns3$2:$1 ./gns3$2/
+}
+
+
+#fonction message
+#affiche comment lancer les instances
+
+message () {
+echo "[-]Pour le serveur:
+   docker run -d -it --net=host --privileged --volume=GNS3:/home/gns3user --name gns3server gns3server:$label"
+echo "[-]Pour le client:
+   docker run --net=host --privileged --env='DISPLAY' \
+    --volume=GNS3:/home/gns3user \
+    --volume='$HOME/.Xauthority:/root/.Xauthority:rw' \
+    --name gns3client  gns3client:$label"
+}
+
+
+########
+# Main #
+########
+
+echo "[+]Dockerisation de GNS3"
+(
+ compile $label "server"
+ compile $label "client"
+)
+
+message
+
+echo "[+]Demarage du serveur:"
+docker run -d -it --net=host --privileged --volume=GNS3:/home/gns3user --name gns3server gns3server:$label
+
+if [[ $(echo $?) -eq 0 ]]; then
+    echo "[-]Serveur lancé"
+else
+    echo "[!]attention, relancer le serveur manuellement, pour info voici le log"
+    docker logs gns3server:$label
+fi
+
+echo "[+]Demarage du client"
+docker run --net=host --privileged --env="DISPLAY" --volume=GNS3:/home/gns3user --volume="$HOME/.Xauthority:/root/.Xauthority:rw" --name gns3client gns3client:$label
+
+if [[ $(echo $?) -eq 0 ]]; then
+    echo "[-]Enjoy"
+else
+    echo "[!]attention, relancer le client manuellement, pour info voici le log"
+     docker logs gns3client:$label
+fi    
