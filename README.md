@@ -3,9 +3,8 @@
 At the root of the project, a bash script allows you to build the docker container bundle for GNS3 v2.2.  
 Otherwise, you can find them at:  
 
-* https://hub.docker.com/repository/docker/cybermeme/gns3-2.2-client  
-* https://hub.docker.com/repository/docker/cybermeme/gns3-2.2-server
-
+* https://hub.docker.com/r/cybermeme/gns3-2.2-server
+* https://hub.docker.com/r/cybermeme/gns3-2.2-client
 
 This instance of GNS3 has installed some basic utilities such as VPCS, dynamips, docker, xterm, Wireshark and qemu.  
 
@@ -53,8 +52,9 @@ If you have used it on another OS, please send me a feedback.
 A la racine du projet, un script bash vous permet de construire la base de containers docker pour GNS3 v2.2.  
 Sinon, vous pouvez les trouver à:   
 
-* https://hub.docker.com/repository/docker/cybermeme/gns3-2.2-client  
-* https://hub.docker.com/repository/docker/cybermeme/gns3-2.2-server
+* https://hub.docker.com/r/cybermeme/gns3-2.2-server
+* https://hub.docker.com/r/cybermeme/gns3-2.2-client
+
 
 
 Cette instance de GNS3 à les utilitaires de bases installés VPCS, dynamips, docker, xterm, Wireshark et qemu.  
