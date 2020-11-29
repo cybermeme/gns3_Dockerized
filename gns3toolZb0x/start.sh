@@ -26,10 +26,10 @@ read -p "what is your chose ? " i
 
 while [ -z $j ]; do
   case $i in
-  1) elinks
+  1) dhclient eth0 && elinks
     j=True
     ;;
-  2) tcpdump -n -i eth0
+  2) dhclient eth0; tcpdump -n -i eth0
     j=True
     ;;
   3) bash

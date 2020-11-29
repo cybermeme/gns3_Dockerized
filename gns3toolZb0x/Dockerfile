@@ -4,7 +4,7 @@ LABEL Maintainer="cybermeme@arch-libertas.net" \
       Description="gns3 basic toolZbox" \
       Version="2.2.16"
 
-RUN dnf update -yq; dnf install -yq elinks tcpdump net-tools iproute; dnf clean all;
+RUN dnf update -yq; dnf install -yq elinks dhclient tcpdump net-tools iproute; dnf clean all;
 
 ADD ./interfaces /etc/network
 ADD ./start.sh /root
