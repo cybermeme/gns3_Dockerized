@@ -2,8 +2,8 @@
 
 ###########################
 # Docker gns3             #
-# version: 2beta	   #
-# Usage:		   #
+# version: 2.1  	  #
+# Usage:	          #
 # ./compileDockerGns3 tag #
 ###########################
 
@@ -22,10 +22,10 @@
 ############
 
 #si pas d'arguments le tag est latest
-if [[ -z $1 ]] ; then
+if [[ -z $2 ]] ; then
   label="latest"
 else
-  label=$1
+  label=$2
 fi
 
 
@@ -36,16 +36,26 @@ fi
 #fonction compile
 # argument $1 = $1 de l'appel
 #argument $2 est le nom serveur ou client
-
-compile () {
-    docker build -t gns3base:v2b ./gns3Base
-    docker build -t gns3$2:$1 ./gns3$2/
+compileBase () {
+    docker build -t gns3base:$1 ./gns3Base
 }
 
+compile () {
+    docker build -t gns3$2:$1 ./gns3$2
+}
+
+compileAll () {
+    echo "[+]Dockerisation de GNS3"
+    (
+	compileBase $label
+	compile $label "server"
+	compile $label "client"
+	compile $label "toolzb0x"
+    )
+}
 
 #fonction message
 #affiche comment lancer les instances
-
 message () {
 echo "[-]Pour le serveur:
    docker run -d -it --net=host --privileged --volume=GNS3:/home/gns3user --name gns3server gns3server:$label"
@@ -56,35 +66,50 @@ echo "[-]Pour le client:
     --name gns3client  gns3client:$label"
 }
 
+#fonction pour lancer les containers
+startgns () {
+    echo "[+]Demarage du serveur:"
+    docker run -d -it --net=host --privileged --volume=GNS3:/home/gns3user --name gns3server gns3server:$label
+
+    if [[ $(echo $?) -eq 0 ]]; then
+	echo "[-]Serveur lancé"
+    else
+	echo "[!]attention, relancer le serveur manuellement, pour info voici le log"
+	docker logs gns3server:$label
+    fi
+
+    echo "[+]Demarage du client"
+    docker run --net=host --privileged --env="DISPLAY" --volume=GNS3:/home/gns3user --volume="$HOME/.Xauthority:/root/.Xauthority:rw" --name gns3client gns3client:$label
+
+    if [[ $(echo $?) -eq 0 ]]; then
+	echo "[-]Enjoy"
+    else
+	echo "[!]attention, relancer le client manuellement, pour info voici le log"
+	docker logs gns3client:$label
+    fi    
+}
+
 
 ########
 # Main #
 ########
 
-echo "[+]Dockerisation de GNS3"
-(
- compile $label "server"
- compile $label "client"
-)
 
-message
 
-echo "[+]Demarage du serveur:"
-docker run -d -it --net=host --privileged --volume=GNS3:/home/gns3user --name gns3server gns3server:$label
-
-if [[ $(echo $?) -eq 0 ]]; then
-    echo "[-]Serveur lancé"
-else
-    echo "[!]attention, relancer le serveur manuellement, pour info voici le log"
-    docker logs gns3server:$label
-fi
-
-echo "[+]Demarage du client"
-docker run --net=host --privileged --env="DISPLAY" --volume=GNS3:/home/gns3user --volume="$HOME/.Xauthority:/root/.Xauthority:rw" --name gns3client gns3client:$label
-
-if [[ $(echo $?) -eq 0 ]]; then
-    echo "[-]Enjoy"
-else
-    echo "[!]attention, relancer le client manuellement, pour info voici le log"
-     docker logs gns3client:$label
-fi    
+while getopts ":bcsh" opt; do
+    case ${opt} in
+	b ) echo "[+] On compile et on lance"
+	    compileAll
+	    message
+	    ;;
+	s ) echo "[+] on lance les containers"
+     	    startgns
+	    message
+	    ;;
+	c ) echo "[+] on lance la compilation uniquement"
+    	    compileAll
+	    ;;
+	h ) echo "[*] Usage: ./$0 [-c to create docker containers |-s to launch those containers| -b for both] tag"
+	    ;;
+    esac
+done
